@@ -1,16 +1,31 @@
-import React from 'react'
-import Navbar from '../components/Navbar'
-import Header from '../components/Header'
-import BlogList from '../components/BlogList'
+import { useState } from 'react';
+import Navbar from '../components/Navbar';
+import Header from '../components/Header';
+import BlogList from '../components/BlogList';
+import BlogCard from '../components/BlogCard';
+import { blog_data } from '../assets/assets.js';
+import NewsLater from '../components/NewsLater.jsx';
+import Footer from '../components/footer.jsx';
 
 const Home = () => {
-  return (
-    <>
-      <Navbar/>
-      <Header/>
-      <BlogList/>
-    </>
-  )
-}
+  const [menu, setMenu] = useState("All");
 
-export default Home
+  return (
+    <div className='pb-4'>
+      <Navbar />
+      <Header />
+      <BlogList menu={menu} setMenu={setMenu} />
+      <div className="flex flex-wrap justify-center gap-4 px-4">
+        {blog_data
+          .filter(blog => menu === "All" || menu === blog.category)
+          .map((item, index) => (
+            <BlogCard blog={item} key={index} />
+          ))}
+      </div>
+      <NewsLater/>
+      <Footer/>
+    </div>
+  );
+};
+
+export default Home;
