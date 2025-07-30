@@ -11,7 +11,7 @@ const Home = () => {
   const [menu, setMenu] = useState("All");
 
   return (
-    <div className='pb-4'>
+    <div>
       <Navbar />
       <Header />
       <BlogList menu={menu} setMenu={setMenu} />
