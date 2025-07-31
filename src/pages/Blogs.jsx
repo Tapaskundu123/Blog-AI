@@ -1,28 +1,40 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useDebugValue } from "react";
 import { useParams } from "react-router-dom";
 import { blog_data } from "../assets/assets.js";
+import Footer from '../components/Footer'
 import Navbar from "../components/Navbar.jsx";
-import { assets } from "../assets/assets.js";
+import { assets, comments_data } from "../assets/assets.js";
 import moment from "moment";
+import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
+import { CircleUserRound } from "lucide-react";
+import Loader from "../components/Loader.jsx";
 
 const Blogs = () => {
   const { id } = useParams();
   const [data, setData] = useState(null);
+  const [newCommentByUser,setNewCommentByUser]= useState('')
+   const [newCommentUserName,setNewCommentUserName]= useState('')
+
+  const HandleComment= (e)=>{
+     e.preventDefault();
+    
+  }
 
   useEffect(() => {
     const fetchBlogData = async () => {
+
+      await new Promise(res => setTimeout(res, 2000)); // Simulate loading
+      
       const blog_details = blog_data.find((blog) => blog._id === id);
       setData(blog_details);
     };
 
     fetchBlogData();
+
   }, [id]);
 
-  if (!data) {
-    return <p className="text-center py-8 text-sm sm:text-base">Loading blog...</p>;
-  }
-
-  return (
+  
+return data? (
     <div className="relative min-h-screen">
       <Navbar />
       <div className="px-4 sm:px-6 lg:px-10 max-w-5xl mx-auto py-10 relative z-10">
@@ -57,15 +69,46 @@ const Blogs = () => {
         <div className="text-base sm:text-lg leading-7 font-serif text-justify text-gray-800">
           <p dangerouslySetInnerHTML={{ __html: data.description }} />
         </div>
-      </div>
 
+        <div className="py-10">
+          <h1 className="py-2"><span className="font-semibold">Comments </span>{ comments_data.length}</h1>
+          <div className="flex flex-col gap-2">
+           {comments_data.map((item)=>(
+            <div className="bg-primary-200 border border-gray-400 rounded px-4 py-3 w-full">
+               <p className="flex gap-1 font-medium"><CircleUserRound/>{item.name}</p>
+               <p className="pl-6 text-sm p-2">{item.content}</p>
+               <p className="text-right text-xs">{moment(item.createdAt).fromNow()}</p>
+            </div>
+           ))} 
+             
+          </div>
+        </div>
+
+         <form onSubmit={HandleComment} className="w-[70%] gap-2">  {/* add comment section */}
+            <h1 className="py-2">Add your comment</h1>
+            <input type="text" placeholder="Name" value={newCommentUserName} onChange={(e)=>setNewCommentUserName(e.target.value)} className="w-full px-4 border py-2 my-2 rounded"/>
+            <textarea type="text" placeholder="Comment" value={newCommentByUser} onChange={(e)=>setNewCommentByUser(e.target.value)} className="w-full h-40 border px-4 py-2 my-2 rounded"/>
+            <button className="bg-primary border-none text-white rounded-xl py-3 px-6" type="submit">Submit</button>
+          </form>
+{/* share buttons */}
+ <div className="py-4">
+  <p>Share this article on social media</p>
+    <div className="flex gap-4 py-2 text-2xl">
+       <FaFacebook className="cursor-pointer text-blue-600" />
+       <FaTwitter className="cursor-pointer text-sky-500" />
+       <FaInstagram className="cursor-pointer text-pink-600" />
+     </div>
+   </div>
+
+      </div>
+     <Footer/>
       <img
         src={assets.gradientBackground}
         alt="blur-bg"
         className="absolute -top-20 -z-0 opacity-30 w-full h-auto"
       />
     </div>
-  );
+  ):(<Loader/>)
 };
 
 export default Blogs;

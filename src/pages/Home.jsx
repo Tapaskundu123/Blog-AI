@@ -5,7 +5,7 @@ import BlogList from '../components/BlogList';
 import BlogCard from '../components/BlogCard';
 import { blog_data } from '../assets/assets.js';
 import NewsLater from '../components/NewsLater.jsx';
-import Footer from '../components/footer.jsx';
+import Footer from '../components/Footer.jsx';
 
 const Home = () => {
   const [menu, setMenu] = useState("All");

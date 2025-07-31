@@ -7,7 +7,7 @@ const Navbar = () => {
     const navigate= useNavigate();
   return (
     <>
-      <div className="flex justify-between items-center px-4 py-4 sm:px-16">
+      <div className="flex justify-between items-center px-4 py-4 sm:px-16 border-b-1 border-b-gray-400">
         <img src={LogoImg} alt="logoImg" onClick={()=>navigate('/')}
         className='h-8 sm:h-10 cursor-pointer' />
         <button className='border-none cursor-pointer bg-primary text-white px-6 py-3 rounded-3xl flex ' onClick={()=>navigate('/admin')}>
