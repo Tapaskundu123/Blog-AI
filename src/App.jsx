@@ -8,6 +8,7 @@ import Dashboard from './pages/Admin/Dashboard.jsx'
 import AddBlog from './pages/Admin/AddBlog.jsx'
 import ListBlog from './pages/Admin/ListBlog.jsx'
 import Comments from './pages/Admin/Comments.jsx'
+import Login from './components/LoginAdmin/Login.jsx';
 
 function App() {
 
@@ -16,7 +17,7 @@ function App() {
      <Routes>
       <Route path='/' element={<Home/>} />
        <Route path='/Blog/:id' element={<Blogs/>} />
-       <Route path='/Admin' element={<Layout/>}>
+       <Route path='/Admin' element={ false? <Layout/>:<Login/>}>
             <Route index element={<Dashboard/>} /> {/*default for /admin */}
            <Route path='AddBlog' element={<AddBlog/>} />
            <Route path='ListBlog' element={<ListBlog/>} />
