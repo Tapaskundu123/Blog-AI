@@ -17,7 +17,7 @@ function App() {
      <Routes>
       <Route path='/' element={<Home/>} />
        <Route path='/Blog/:id' element={<Blogs/>} />
-       <Route path='/Admin' element={ false? <Layout/>:<Login/>}>
+       <Route path='/Admin' element={ true? <Layout/>:<Login/>}>
             <Route index element={<Dashboard/>} /> {/*default for /admin */}
            <Route path='AddBlog' element={<AddBlog/>} />
            <Route path='ListBlog' element={<ListBlog/>} />
