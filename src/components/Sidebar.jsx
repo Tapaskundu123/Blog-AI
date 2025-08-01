@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 
 const Sidebar = () => {
   return (
-    <div className="w-[50%] md:w-[25%] border border-gray-400 min-h-screen">
+    <div className="w-[50%] md:w-[25%] border border-gray-400 h-screen">
       <div className="py-4">
         <NavLink
           to="/Admin"
