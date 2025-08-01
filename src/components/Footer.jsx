@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { assets, footer_data } from '../assets/assets.js';
 import { Copyright } from 'lucide-react';
 
