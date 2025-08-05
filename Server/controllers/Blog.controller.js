@@ -2,6 +2,8 @@
 import fs from 'fs'
 import imagekit from '../DB/imageKit.js';
 import { UserInfo } from '../models/Blog.model.js';
+import { Comment } from '../models/comment.model.js';
+import { comment } from 'postcss';
 
 export const BlogPost = async (req, res) => {
   try {
@@ -133,3 +135,49 @@ export const toggleBlogPublishById= async(req,res)=>{
   }
 }
 
+export const addComment= async(req,res)=>{
+
+  try{
+   const {blog, content, name} = req.body;
+
+   if(!blog || !content || !name){
+      return res.status(404)
+                .json({success:false, message:"Missing Fields"})
+   }
+   await Comment.create({
+       blog,
+       content, 
+       name
+   });
+
+   return res.status(200)
+             .json({success:true, message:"Comment added Successsfully", comment});
+  }
+     catch (error) {
+       return res.status(500)
+                 .json({success:false, message:error.message})
+  }
+}
+
+
+export const getBlogComment= async(req,res)=>{
+
+  try{
+  const {blogId}= req.body;
+
+  if(!blog){
+     return res.status(404)
+                .json({success:false, message:"Missing blog ID"})
+  }
+
+  const blogComment= await Comment.findById(blogId);
+
+  return res.status(200)
+             .json({success:true, blogComment});
+  }
+     catch (error) {
+       return res.status(500)
+                 .json({success:false, message:error.message})
+  }
+
+}
