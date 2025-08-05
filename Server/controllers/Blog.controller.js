@@ -51,4 +51,85 @@ export const BlogPost = async (req, res) => {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
+
+export const Allblogs= async(_,res)=>{
+
+try{
+    const AllBlogs= await UserInfo.find({isPublished:true});
+
+    return res.status(200)
+              .json({success:true, AllBlogs})
   
+}
+ catch(error){
+    return res.status(500)
+              .json({success:false, message:error.message})
+ }
+}
+
+
+export const getBlogById = async(req,res)=>{
+
+  try {
+       const {blogId}= req.params;
+
+       if(!blogId){
+        return res.status(404)
+                  .json({success:false, message:"blog not found"})
+       }
+      const blog= await UserInfo.findById(blogId);
+
+      return res.status(200)
+              .json({success:true, blog})
+  } catch (error) {
+     return res.status(500)
+              .json({success:false, message:error.message})
+  }
+ 
+}
+
+export const deleteBlogById= async(req,res)=>{
+
+  try {
+      const {blogId}= req.body;
+
+      if(!blogId){
+        return res.status(404)
+                  .json({success:false, message:"blog not found"})
+     }
+      await UserInfo.findByIdAndDelete(blogId);
+
+       return res.status(200)
+              .json({success:true, message:"Blog deleted successfully"})
+  } 
+  catch (error) {
+       return res.status(500)
+                 .json({success:false, message:error.message})
+  }
+}
+
+export const toggleBlogPublishById= async(req,res)=>{
+
+  try {
+      const {blogId}= req.body;
+
+      if(!blogId){
+        return res.status(404)
+                  .json({success:false, message:"blog not found"})
+     }
+     const Blog=  await UserInfo.findById(blogId);
+
+      Blog.isPublished= !Blog.isPublished;
+ 
+      await Blog.save();
+
+      return res.status(200)
+                .json({success:true, message:"Blog status updated successfully"})
+   
+  } 
+  catch (error) {
+       return res.status(500)
+                 .json({success:false, message:error.message})
+  }
+}
+
