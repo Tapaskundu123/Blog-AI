@@ -1,8 +1,7 @@
 
 import fs from 'fs'
-import imagekit from '../DB/imageKit';
-import { UserInfo } from '../models/Blog.model';
-
+import imagekit from '../DB/imageKit.js';
+import { UserInfo } from '../models/Blog.model.js';
 
 export const BlogPost = async (req, res) => {
   try {
