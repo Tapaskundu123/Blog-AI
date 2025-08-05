@@ -17,6 +17,8 @@ export const LoginAdmin= async(req,res)=>{
 
     const jwtToken= jwt.sign({email},process.env.JWT_SECRET_KEY);
 
+    console.log(jwtToken);
+    
     return res.status(200)
               .cookie('Token',jwtToken,{secure:true,httpOnly:false})
               .json({success:true, message:"Admin Logged in Successfully"})

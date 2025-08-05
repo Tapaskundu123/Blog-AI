@@ -1,6 +1,5 @@
-// Server/middleware/multer.js
+// middleware/multer.js
 import multer from 'multer';
 
-const storage = multer.memoryStorage(); // or diskStorage if saving locally
-
+const storage = multer.memoryStorage(); // ✔️ correct for buffer upload
 export const upload = multer({ storage });

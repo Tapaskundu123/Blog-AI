@@ -6,20 +6,22 @@ import { UserInfo } from '../models/Blog.model.js';
 export const BlogPost = async (req, res) => {
   try {
     const { title, subTitle, blogDescription, blogCategory, isPublished } = JSON.parse(req.body.blog);
-    const imageFile = req.file;
+    const Image = req.file;
 
     // Check if fields are provided
     if (!title || !subTitle || !blogDescription || !blogCategory) {
-      return res.status(404).json({ success: false, message: "Missing Required fields" });
+      return res.status(400).json({ success: false, message: "Missing required fields" });
     }
 
-    // Read file from disk
-    const fileBuffer = fs.readFileSync(imageFile.path);
+    // Check if file is provided
+    if (!Image) {
+      return res.status(400).json({ success: false, message: "No file uploaded" });
+    }
 
-    // Upload to ImageKit
+    // Upload to ImageKit using buffer
     const response = await imagekit.upload({
-      file: fileBuffer,
-      fileName: imageFile.originalName,
+      file: Image.buffer, // Use buffer instead of reading from disk
+      fileName: Image.originalname, // Use originalname (not originalName)
       folder: "/blogs"
     });
 
@@ -39,7 +41,7 @@ export const BlogPost = async (req, res) => {
       subTitle,
       blogDescription,
       blogCategory,
-      image: optimizedImageUrl,
+      Image: optimizedImageUrl,
       isPublished
     });
 
@@ -48,5 +50,5 @@ export const BlogPost = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
   }
-}
+};
   
