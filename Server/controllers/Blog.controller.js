@@ -143,7 +143,7 @@ export const addComment= async(req,res)=>{
    if(!blog || !content || !name){
       return res.status(404)
                 .json({success:false, message:"Missing Fields"})
-   }
+   } 
    await Comment.create({
        blog,
        content, 
@@ -159,21 +159,20 @@ export const addComment= async(req,res)=>{
   }
 }
 
-
-export const getBlogComment= async(req,res)=>{
+export const getBlogComments= async(req,res)=>{
 
   try{
   const {blogId}= req.body;
 
   if(!blog){
      return res.status(404)
-                .json({success:false, message:"Missing blog ID"})
+               .json({success:false, message:"Missing blog ID"})
   }
 
-  const blogComment= await Comment.findById(blogId);
+  const blogComment= await Comment.find({_id:blogId, isApproved:true}).sort({createdAt:-1});
 
   return res.status(200)
-             .json({success:true, blogComment});
+            .json({success:true, blogComment});
   }
      catch (error) {
        return res.status(500)
