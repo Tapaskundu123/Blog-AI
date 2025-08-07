@@ -3,7 +3,6 @@ import fs from 'fs'
 import imagekit from '../DB/imageKit.js';
 import { UserInfo } from '../models/Blog.model.js';
 import { Comment } from '../models/comment.model.js';
-import { comment } from 'postcss';
 
 export const BlogPost = async (req, res) => {
   try {
@@ -93,7 +92,7 @@ export const getBlogById = async(req,res)=>{
 export const deleteBlogById= async(req,res)=>{
 
   try {
-      const {blogId}= req.body;
+      const {blogId}= req.params;
 
       if(!blogId){
         return res.status(404)
@@ -101,6 +100,7 @@ export const deleteBlogById= async(req,res)=>{
      }
       await UserInfo.findByIdAndDelete(blogId);
 
+      await Comment.deleteMany({blog:blogId});
        return res.status(200)
               .json({success:true, message:"Blog deleted successfully"})
   } 
@@ -113,7 +113,7 @@ export const deleteBlogById= async(req,res)=>{
 export const toggleBlogPublishById= async(req,res)=>{
 
   try {
-      const {blogId}= req.body;
+      const {blogId}= req.params;
 
       if(!blogId){
         return res.status(404)
@@ -162,9 +162,9 @@ export const addComment= async(req,res)=>{
 export const getBlogComments= async(req,res)=>{
 
   try{
-  const {blogId}= req.body;
+  const {blogId}= req.params;
 
-  if(!blog){
+  if(!blogId){
      return res.status(404)
                .json({success:false, message:"Missing blog ID"})
   }
@@ -180,3 +180,4 @@ export const getBlogComments= async(req,res)=>{
   }
 
 }
+

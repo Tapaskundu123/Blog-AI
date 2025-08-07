@@ -8,14 +8,14 @@ const blogRouter = express.Router();
 blogRouter.post('/add', upload.single('Image'), auth, BlogPost);
 
 blogRouter.get('/AllBlogs', Allblogs);
-blogRouter.get('/:blogId',getBlogById);
-blogRouter.post('/delete-blog',auth,deleteBlogById);
+blogRouter.get('/getBlogs/:blogId',getBlogById);
+blogRouter.get('/delete-blog/:blogId',auth,deleteBlogById);
 
-blogRouter.post('/toggle-Publish',auth,toggleBlogPublishById);// for approved 
+blogRouter.get('/toggle-Publish/:blogId',auth,toggleBlogPublishById);// for approved 
 
 blogRouter.post('/addComment',addComment); // add comment by user
 
-blogRouter.post('/get-blog-comments',getBlogComments); //get all comments
+blogRouter.post('/get-blog-comments/:blogId',getBlogComments); //get all comments
 
 export default blogRouter;
 
