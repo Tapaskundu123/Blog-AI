@@ -1,6 +1,6 @@
 import express from "express";
 import { getAllBlogsAdmin, getAllComments, getApproveCommentById, getDashboardData, getDeleteCommentById, LoginAdmin } from "../controllers/AdminController.js";
-import auth from '../middleware/auth.js'
+import {auth} from '../middleware/auth.js'
 const adminRouter= express.Router();
 
 adminRouter.post('/login',LoginAdmin);
