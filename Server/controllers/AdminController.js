@@ -25,7 +25,7 @@ export const LoginAdmin = async (req, res) => {
         httpOnly: true,
         maxAge: 24 * 60 * 60 * 1000, // 1 day
       })
-      .json({ success: true, message: "Admin Logged in Successfully" });
+      .json({ success: true, message: "Admin Logged in Successfully",jwtToken });
 
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
