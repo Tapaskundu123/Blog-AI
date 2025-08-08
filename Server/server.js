@@ -1,26 +1,35 @@
 import 'dotenv/config';
 import cors from 'cors';
-import express from 'express'
+import express from 'express';
 import ConnectDB from './DB/MongoDBConnect.js';
 import adminRouter from './routes/adminRouter.js';
 import blogRouter from './routes/blogRouter.js';
 
-const app= express();
+const app = express();
 
+// ✅ Connect to MongoDB
 ConnectDB();
 
-app.use(cors());
+// ✅ Allow frontend to connect
+app.use(cors({
+    origin: 'http://localhost:5173', // Your frontend
+    credentials: true // Allow cookies/authorization headers
+}));
+
+// ✅ Parse JSON bodies
 app.use(express.json());
 
-app.use('/api/admin',adminRouter);
-app.use('/api/blog',blogRouter);
+// ✅ Routes
+app.use('/api/admin', adminRouter);
+app.use('/api/blog', blogRouter);
 
-const PORT= process.env.PORT || 3000;
+// ✅ Default route
+app.get('/', (_, res) => {
+    res.send("API working");
+});
 
-app.get('/',(_,res)=>{
-    res.send("API working")
-})
+const PORT = process.env.PORT || 3000;
 
-app.listen(PORT,()=>{
-    console.log(`start server on http://localhost:${PORT}`);
-})
+app.listen(PORT, () => {
+    console.log(`✅ Server running on http://localhost:${PORT}`);
+});

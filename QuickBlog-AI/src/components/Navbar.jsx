@@ -20,7 +20,7 @@ const Navbar = () => {
         className="bg-primary text-white px-6 py-3 rounded-3xl flex items-center"
         onClick={() => navigate(token ? '/Admin' : '/Login')}
       >
-        <p className="pl-2">{token ? 'Dashboard' : 'Login'}</p>
+        <p className="pl-2">{token==='' ? 'Login':'Dashboard'}</p>
         <img src={arrowImg} alt="Arrow" className="pl-2" />
       </button>
     </div>
@@ -28,3 +28,5 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+

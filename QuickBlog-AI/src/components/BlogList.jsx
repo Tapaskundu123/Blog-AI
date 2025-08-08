@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { motion, LayoutGroup } from "framer-motion";
+import { useAppContext } from "../../context/AppContext";
 
 const BlogList = ({menu,setMenu}) => {
 
   const blogList = ["All", "Technology", "Startup", "Lifestyle", "Finance"];
 
+  const {blogs, input}= useAppContext();
+  
   return (
     <LayoutGroup>
       <div className="flex justify-center flex-wrap items-center gap-4 py-10 relative">

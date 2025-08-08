@@ -1,55 +1,60 @@
-import { useContext, useEffect } from "react";
-import { createContext } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
-import {useNavigate} from 'react-router-dom'
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
-axios.defaults.baseURL= import.meta.env.VITE_BACKEND_URL;
-const AppContext= createContext()
+axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
+axios.defaults.withCredentials = true; // ✅ send cookies automatically
 
-export const AppProvider= ({children})=>{
+const AppContext = createContext();
 
-    const navigate= useNavigate()
+export const AppProvider = ({ children }) => {
+  const navigate = useNavigate();
 
-    const [token, setToken]= useState('')
-    const [blogs,setBlogs]= useState([]);
-    const [input,setInput]= useState("")
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [blogs, setBlogs] = useState([]);
+  const [input, setInput] = useState("");
 
-    const fetchBlogs= async()=>{
-        try {
-            
-            const {data}= await axios.get('/get-All-blogs-admin')
-            data.sucess? setBlogs(data.blogs): toast.error(data.message)
+  const fetchBlogs = async () => {
+    try {
+      
+      const { data } = await axios.get("/api/admin/get-All-blogs-admin");
 
-        }
-         catch (error) {
-            toast.error(error.message);
-        }
-    }
-
-    useEffect(()=>{
-      fetchBlogs();
-
-      const token= localStorage.getItem('token')
-      if(token){
-
-        setToken(token)
-        axios.defaults.headers.common['Authorization']= `Bearer ${token}`;
+      if (data.success) {
+          setBlogs(data.blogs);
       }
-    },[]);
-    const value={
-        axios,navigate,token, setToken, blogs, setBlogs, input, setInput
-    };
-    return(
+      else {
+          toast.error(data.message);
+      }
+    } catch (error) {
 
-        <AppContext.Provider value={value}>
-            {children}
-        </AppContext.Provider>
-    )
-}
+      if (error.response?.status === 401) {
+        toast.error("Unauthorized! Please log in first.");
+        setIsLoggedIn(false);
+        navigate("/login");
+      }
+       else {
+        toast.error(error.response?.data?.message || "Something went wrong");
+      }
+    }
+  };
 
-export const useAppContext= ()=>{
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
 
-    return useContext(AppContext)
-}
+  const value = {
+    axios,
+    navigate,
+    isLoggedIn,
+    setIsLoggedIn,
+    blogs,
+    setBlogs,
+    input,
+    setInput,
+  };
+
+  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
+};
+
+export const useAppContext = () => useContext(AppContext);

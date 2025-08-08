@@ -3,6 +3,7 @@ import { UserInfo } from '../models/Blog.model.js';
 import { Comment } from '../models/comment.model.js';
 
 // ✅ Admin Login
+
 export const LoginAdmin = async (req, res) => {
   const { email, password } = req.body;
 
@@ -15,20 +16,37 @@ export const LoginAdmin = async (req, res) => {
       return res.status(404).json({ success: false, message: "Invalid Password" });
     }
 
-    const jwtToken = jwt.sign({ email }, process.env.JWT_SECRET_KEY);
+    const jwtToken = jwt.sign({ email }, process.env.JWT_SECRET_KEY, { expiresIn: "1d" });
 
-    console.log(jwtToken);
-
-    return res.status(200)
-      .cookie('Token', jwtToken, {
+    return res
+      .status(200)
+      .cookie("Token", jwtToken, {
         secure: true,
         httpOnly: true,
-        maxAge: 24 * 60 * 60 * 1000, // 1 day
+        sameSite: "strict",
+        maxAge: 24 * 60 * 60 * 1000,
       })
-      .json({ success: true, message: "Admin Logged in Successfully",jwtToken });
+      .json({ success: true, message: "Admin Logged in Successfully" });
 
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const LogoutAdmin = async (req, res) => {
+  const token = req.cookies.Token; // exact case
+
+  if (!token) return res.status(401).json({ message: "No token found" });
+
+  try {
+    res.clearCookie("Token", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+    });
+    res.json({ success: true, message: "Logged out successfully" });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
   }
 };
 

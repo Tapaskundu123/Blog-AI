@@ -7,7 +7,8 @@ import Dashboard from './pages/Admin/Dashboard.jsx';
 import AddBlog from './pages/Admin/AddBlog.jsx';
 import ListBlog from './pages/Admin/ListBlog.jsx';
 import Comments from './pages/Admin/Comments.jsx';
-import Login from './components/LoginAdmin/Login.jsx';
+import LoginAdmin from './components/LoginAdmin/Login.jsx';
+import LogoutAdmin  from './components/LoginAdmin/Logout.jsx';
 import 'quill/dist/quill.snow.css';
 import { Toaster } from 'react-hot-toast';
 import { useAppContext } from '../context/AppContext.jsx';
@@ -21,13 +22,14 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/Blog/:id' element={<Blogs />} />
-        <Route path='/Admin' element={token ? <Layout /> : <Login />}>
+        <Route path='/Admin' element={token ? <Layout /> : <LoginAdmin />}>
           <Route index element={<Dashboard />} />
           <Route path='AddBlog' element={<AddBlog />} />
           <Route path='ListBlog' element={<ListBlog />} />
           <Route path='Comments' element={<Comments />} />
         </Route>
-        <Route path='/Login' element={<Login />} />
+        <Route path='/login' element={<LoginAdmin />} />
+        <Route path='/logout' element={<LogoutAdmin/>}/>
       </Routes>
     </div>
   );
