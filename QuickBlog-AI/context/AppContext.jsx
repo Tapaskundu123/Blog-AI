@@ -14,20 +14,18 @@ export const AppProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [blogs, setBlogs] = useState([]);
   const [input, setInput] = useState("");
+  const [fromLogout, setFromLogout] = useState(false);
+  const [authLoading, setAuthLoading] = useState(true);
 
   const fetchBlogs = async () => {
     try {
-      
       const { data } = await axios.get("/api/admin/get-All-blogs-admin");
 
       if (data.success) {
-          setBlogs(data.blogs);
+        setBlogs(data.blogs);
       }
-      else {
-          toast.error(data.message);
-      }
-    } catch (error) {
-
+    } 
+    catch (error) {
       if (error.response?.status === 401) {
         toast.error("Unauthorized! Please log in first.");
         setIsLoggedIn(false);
@@ -40,8 +38,30 @@ export const AppProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    fetchBlogs();
+    const checkAuth = async () => {
+      try {
+        const { data } = await axios.get("/api/admin/get-All-blogs-admin");
+        if (data.success) {
+          setBlogs(data.blogs);
+          setIsLoggedIn(true);
+        }
+      } catch (error) {
+        setIsLoggedIn(false);
+      } finally {
+        setAuthLoading(false);
+      }
+    };
+    checkAuth();
   }, []);
+
+  useEffect(() => {
+    if (fromLogout) {
+      setFromLogout(false);
+    }
+    if (isLoggedIn) {
+      fetchBlogs();
+    }
+  }, [isLoggedIn, fromLogout]);
 
   const value = {
     axios,
@@ -52,6 +72,9 @@ export const AppProvider = ({ children }) => {
     setBlogs,
     input,
     setInput,
+    fromLogout,
+    setFromLogout,
+    authLoading
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

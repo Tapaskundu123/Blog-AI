@@ -4,11 +4,16 @@ import express from 'express';
 import ConnectDB from './DB/MongoDBConnect.js';
 import adminRouter from './routes/adminRouter.js';
 import blogRouter from './routes/blogRouter.js';
+import cookieParser from 'cookie-parser';
 
 const app = express();
 
 // ✅ Connect to MongoDB
 ConnectDB();
+
+// ✅ Parse JSON bodies
+app.use(express.json());
+app.use(cookieParser());
 
 // ✅ Allow frontend to connect
 app.use(cors({
@@ -16,8 +21,6 @@ app.use(cors({
     credentials: true // Allow cookies/authorization headers
 }));
 
-// ✅ Parse JSON bodies
-app.use(express.json());
 
 // ✅ Routes
 app.use('/api/admin', adminRouter);

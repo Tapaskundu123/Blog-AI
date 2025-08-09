@@ -5,20 +5,20 @@ import { useAppContext } from "../../../context/AppContext";
 
 const LogoutAdmin = () => {
   const navigate = useNavigate();
-  const { axios, setIsLoggedIn } = useAppContext();
+  const { axios, setIsLoggedIn, setFromLogout } = useAppContext();
 
   const handleLogout = async () => {
     try {
-      const res = await axios.post("/api/admin/logout");
+      const res =await axios.post("/api/admin/logout", {}, { withCredentials: true });
 
       if (res.data.success) {
         setIsLoggedIn(false);
+        setFromLogout(true);
         toast.success(res.data.message || "Logged out successfully");
         navigate("/login");
-      } else {
-        toast.error(res.data.message);
-      }
-    } catch (error) {
+      } 
+    }
+     catch (error) {
       toast.error(error.response?.data?.message || error.message);
     }
   };

@@ -14,7 +14,7 @@ const LoginAdmin = () => {
     e.preventDefault();
 
     try {
-      const resData = await axios.post("/api/admin/login", { email, password });
+      const resData= await axios.post("/api/admin/login", { email, password }, { withCredentials: true });
 
       if (resData.data.success) {
         setIsLoggedIn(true);

@@ -20,29 +20,31 @@ export const LoginAdmin = async (req, res) => {
 
     return res
       .status(200)
-      .cookie("Token", jwtToken, {
-        secure: true,
+      .cookie("token", jwtToken, {
+        secure: process.env.NODE_ENV === "production", // ✅ only true in prod
         httpOnly: true,
         sameSite: "strict",
         maxAge: 24 * 60 * 60 * 1000,
       })
       .json({ success: true, message: "Admin Logged in Successfully" });
 
-  } catch (error) {
+  }
+   catch (error) {
     return res.status(500).json({ success: false, message: error.message });
   }
 };
 
 export const LogoutAdmin = async (req, res) => {
-  const token = req.cookies.Token; // exact case
+  const token = req.cookies.token; // exact case
 
   if (!token) return res.status(401).json({ message: "No token found" });
 
   try {
-    res.clearCookie("Token", {
+    res.clearCookie("token", {
       httpOnly: true,
-      secure: true,
+      secure:  process.env.NODE_ENV==="production", // ✅ only true in prod
       sameSite: "strict",
+      maxAge: 24 * 60 * 60 * 1000
     });
     res.json({ success: true, message: "Logged out successfully" });
   } catch (err) {

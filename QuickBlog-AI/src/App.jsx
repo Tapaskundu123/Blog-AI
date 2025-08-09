@@ -14,7 +14,11 @@ import { Toaster } from 'react-hot-toast';
 import { useAppContext } from '../context/AppContext.jsx';
 
 function App() {
-  const { token } = useAppContext();
+  const { isLoggedIn, authLoading } = useAppContext();
+
+  if (authLoading) {
+    return <div>Loading...</div>; // Or a better loader/spinner component
+  }
 
   return (
     <div>
@@ -22,7 +26,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/Blog/:id' element={<Blogs />} />
-        <Route path='/Admin' element={token ? <Layout /> : <LoginAdmin />}>
+        <Route path='/Admin' element={authLoading ? <div>Loading...</div> : isLoggedIn ? <Layout /> : <LoginAdmin />}>
           <Route index element={<Dashboard />} />
           <Route path='AddBlog' element={<AddBlog />} />
           <Route path='ListBlog' element={<ListBlog />} />
