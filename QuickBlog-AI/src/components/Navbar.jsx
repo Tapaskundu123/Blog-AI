@@ -2,7 +2,7 @@ import React from 'react';
 import LogoImg from '../assets/logo.svg';
 import arrowImg from '../assets/arrow.svg';
 import { useNavigate } from 'react-router-dom';
-import { useAppContext } from '../../context/AppContext';
+import { useAppContext } from '../context/AppContext';
 
 const Navbar = () => {
   const navigate = useNavigate();
