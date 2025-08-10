@@ -1,12 +1,16 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 
-    export const ProtectedRoute = () => {
-       const { isLoggedIn, authLoading } = useAppContext();
+const ProtectedRoute = () => {
+  const { isLoggedIn, authLoading } = useAppContext();
 
-       if (authLoading) {
-         return <div>Loading...</div>;
-       }
+  if (authLoading) {
+    // Show loading indicator while checking auth status (prevents redirect flicker)
+    return <div>Loading...</div>;
+  }
 
-       return isLoggedIn ? <Outlet /> : <Navigate to="/login" replace />;
-     };
+  // Only render Outlet (protected content) if authenticated, otherwise redirect to login
+  return isLoggedIn ? <Outlet /> : <Navigate to="/login" replace />;
+};
+
+export default ProtectedRoute;

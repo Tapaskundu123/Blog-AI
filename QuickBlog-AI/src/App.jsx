@@ -1,5 +1,5 @@
 import './App.css';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home.jsx';
 import Blogs from './pages/Blogs.jsx';
 import Layout from './pages/Admin/Layout.jsx';
@@ -12,11 +12,10 @@ import LogoutAdmin from './components/LoginAdmin/Logout.jsx';
 import 'quill/dist/quill.snow.css';
 import { Toaster } from 'react-hot-toast';
 import { useAppContext } from './context/AppContext.jsx';
-import {ProtectedRoute} from './components/ProtectedRoute.jsx';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
 
-function App() {
+const App=()=> {
   const { isLoggedIn, authLoading } = useAppContext();
-  const navigate = useNavigate();
 
   if (authLoading) {
     return <div>Loading...</div>;
@@ -29,7 +28,7 @@ function App() {
         {/* Public Routes */}
         <Route
           path="/"
-          element={isLoggedIn ? navigate("/Admin", { replace: true }) : <Home />}
+          element={isLoggedIn ? <Navigate to="/Admin" replace /> : <Home/>}
         />
         <Route path="/Blog/:id" element={<Blogs />} />
         <Route path="/login" element={<LoginAdmin />} />
@@ -48,5 +47,4 @@ function App() {
     </div>
   );
 }
-
 export default App;
